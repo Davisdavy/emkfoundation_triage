@@ -29,6 +29,7 @@ void main() {
     );
 
     expect(find.text('Patient Registration'), findsOneWidget);
-    expect(find.text('SUBMIT TRIAGE RECORD'), findsOneWidget);
+    // Button shows its disabled-state label when the form is empty.
+    expect(find.text('COMPLETE FORM TO SUBMIT'), findsOneWidget);
   });
 }
