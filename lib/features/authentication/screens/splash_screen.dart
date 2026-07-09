@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_theme.dart';
 import '../../../core/services/connectivity_service.dart';
-import 'triage_screen.dart';
+import '../../triage/screens/triage_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
