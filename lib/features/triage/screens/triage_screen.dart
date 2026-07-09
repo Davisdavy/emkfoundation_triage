@@ -217,7 +217,7 @@ class _TriageScreenState extends State<TriageScreen> with WidgetsBindingObserver
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Paramedic Triage',
+                                            'Medic Triage',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w900,

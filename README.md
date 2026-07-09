@@ -1,4 +1,4 @@
-# Paramedic Triage Intake App
+# Medic Triage Intake App
 
 An offline-first emergency medical triage application built with Flutter that allows paramedics to quickly capture patient information in the field. The application guarantees no triage record is lost by utilizing local persistence and synchronizing automatically when connectivity is restored.
 

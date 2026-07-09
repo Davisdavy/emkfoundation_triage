@@ -34,7 +34,7 @@ class App extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Paramedic Triage',
+        title: 'Medic Triage',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         home: const TriageScreen(),
