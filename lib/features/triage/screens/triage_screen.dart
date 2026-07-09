@@ -188,53 +188,62 @@ class _TriageScreenState extends State<TriageScreen> with WidgetsBindingObserver
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 44,
-                                    height: 44,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: Colors.white.withOpacity(0.15),
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.all(2),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(9),
-                                      child: Image.asset(
-                                        'assets/logo.png',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  const Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Paramedic Triage',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w900,
-                                          fontSize: 22,
-                                          letterSpacing: 0.5,
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 44,
+                                      height: 44,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: Colors.white.withOpacity(0.15),
+                                          width: 1.5,
                                         ),
                                       ),
-                                      Text(
-                                        'Triage Intake Service',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500,
+                                      padding: const EdgeInsets.all(2),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(9),
+                                        child: Image.asset(
+                                          'assets/logo.png',
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                    const SizedBox(width: 12),
+                                    const Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Paramedic Triage',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 21,
+                                              letterSpacing: 0.5,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            'Triage Intake Service',
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
+                              const SizedBox(width: 12),
                               // Network status Chip in White
                               StreamBuilder<bool>(
                                 stream: connectivityService.isOnlineStream,
