@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_theme.dart';
 import '../models/triage_record.dart';
 
 class TriageCard extends StatelessWidget {
@@ -46,8 +47,7 @@ class TriageCard extends StatelessWidget {
   String _formatDateTime(DateTime dt) {
     final hour = dt.hour.toString().padLeft(2, '0');
     final minute = dt.minute.toString().padLeft(2, '0');
-    final second = dt.second.toString().padLeft(2, '0');
-    return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} $hour:$minute:$second';
+    return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} $hour:$minute';
   }
 
   @override
@@ -56,157 +56,208 @@ class TriageCard extends StatelessWidget {
     final priorityLabel = _getPriorityLabel(record.priority);
     final isProminent = record.priority == 1 || record.priority == 2;
 
-    // Subtle background tint for Critical (P1) and High Risk (P2)
+    // Use customized color tokens
     final cardBgColor = isProminent
-        ? priorityColor.withOpacity(0.06)
-        : Theme.of(context).cardColor;
+        ? AppTheme.primary.withOpacity(0.04)
+        : Colors.white;
 
     return Card(
-      elevation: isProminent ? 3 : 1,
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      elevation: isProminent ? 2.5 : 1,
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         side: BorderSide(
-          color: isProminent ? priorityColor.withOpacity(0.5) : Colors.grey.shade300,
-          width: isProminent ? 1.5 : 0.8,
+          color: isProminent ? AppTheme.primary.withOpacity(0.4) : AppTheme.secondaryWhite,
+          width: isProminent ? 1.5 : 1.0,
         ),
       ),
       color: cardBgColor,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Colored vertical status bar indicator
-              Container(
-                width: 8,
-                color: priorityColor,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Top Section with Priority Badge and Info
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Circular Avatar indicating Priority Level
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: priorityColor,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: priorityColor.withOpacity(0.3),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${record.priority}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        record.patientName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16,
+                          color: AppTheme.secondary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Row(
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: priorityColor.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              priorityLabel.toUpperCase(),
+                              style: TextStyle(
+                                color: priorityColor,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          if (isProminent)
+                            Row(
                               children: [
-                                if (isProminent) ...[
-                                  Icon(
-                                    Icons.warning_amber_rounded,
-                                    color: priorityColor,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 4),
-                                ],
-                                Expanded(
-                                  child: Text(
-                                    record.patientName,
-                                    style: TextStyle(
-                                      fontWeight: isProminent ? FontWeight.bold : FontWeight.w600,
-                                      fontSize: 16,
-                                      color: isProminent ? priorityColor : Colors.black87,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                Icon(
+                                  Icons.warning_rounded,
+                                  color: AppTheme.primary,
+                                  size: 14,
+                                ),
+                                const SizedBox(width: 3),
+                                Text(
+                                  'URGENT',
+                                  style: TextStyle(
+                                    color: AppTheme.primary,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w900,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          // Priority Badge
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: priorityColor,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              'P${record.priority} - $priorityLabel',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        record.conditionDescription,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade800,
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 12),
-                      const Divider(height: 1),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                record.status == TriageStatus.inTransit
-                                    ? Icons.local_shipping
-                                    : Icons.access_time,
-                                size: 16,
-                                color: Colors.grey.shade600,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                record.status == TriageStatus.inTransit
-                                    ? 'In Transit'
-                                    : 'Pending',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey.shade700,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            _formatDateTime(record.createdAt),
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                record.isSynced ? '🟢 ' : '🔴 ',
-                                style: const TextStyle(fontSize: 10),
-                              ),
-                              Text(
-                                record.isSynced ? 'Synced' : 'Pending Sync',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: record.isSynced
-                                      ? Colors.green.shade700
-                                      : const Color(0xFFD32F2F),
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ],
                   ),
                 ),
+                // Sync status indicator
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: record.isSynced
+                        ? Colors.green.shade50
+                        : const Color(0xFFFFEBEE),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: record.isSynced
+                          ? Colors.green.shade200
+                          : Colors.red.shade200,
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: record.isSynced ? Colors.green.shade600 : Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        record.isSynced ? 'Synced' : 'Pending',
+                        style: TextStyle(
+                          color: record.isSynced ? Colors.green.shade800 : Colors.red.shade800,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // Condition Description text
+            Text(
+              record.conditionDescription,
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppTheme.tertiary,
+                fontWeight: FontWeight.w500,
+                height: 1.3,
               ),
-            ],
-          ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 12),
+            const Divider(color: AppTheme.secondaryWhite, height: 1),
+            const SizedBox(height: 10),
+            // Bottom Info: transport status & timestamp
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      record.status == TriageStatus.inTransit
+                          ? Icons.local_shipping_outlined
+                          : Icons.access_time_rounded,
+                      size: 16,
+                      color: AppTheme.tertiary,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      record.status == TriageStatus.inTransit
+                          ? 'In Transit'
+                          : 'Pending Transport',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.tertiary,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  _formatDateTime(record.createdAt),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppTheme.tertiary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -28,7 +28,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Patient Intake Form'), findsOneWidget);
+    expect(find.text('Patient Registration'), findsOneWidget);
     expect(find.text('SUBMIT TRIAGE RECORD'), findsOneWidget);
   });
 }

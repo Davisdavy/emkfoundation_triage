@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'core/constants/app_theme.dart';
 import 'core/services/connectivity_service.dart';
 import 'core/services/sync_service.dart';
 import 'features/triage/providers/triage_provider.dart';
@@ -35,20 +36,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: 'Paramedic Triage Intake App',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF8B0000),
-            brightness: Brightness.light,
-          ),
-          cardTheme: const CardThemeData(
-            margin: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-          ),
-          inputDecorationTheme: const InputDecorationTheme(
-            filled: true,
-            border: OutlineInputBorder(),
-          ),
-        ),
+        theme: AppTheme.lightTheme,
         home: const TriageScreen(),
       ),
     );

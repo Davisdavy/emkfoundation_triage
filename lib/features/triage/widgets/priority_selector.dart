@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_theme.dart';
 
 class PrioritySelector extends StatelessWidget {
   final int? selectedPriority;
@@ -13,7 +14,7 @@ class PrioritySelector extends StatelessWidget {
   Color _getPriorityColor(int priority) {
     switch (priority) {
       case 1:
-        return const Color(0xFF8B0000); // Dark Red
+        return AppTheme.primary; // Bright Red
       case 2:
         return Colors.orange.shade800; // Orange
       case 3:
@@ -54,6 +55,7 @@ class PrioritySelector extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
+            color: AppTheme.secondary,
           ),
         ),
         const SizedBox(height: 10),
@@ -68,13 +70,13 @@ class PrioritySelector extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: InkWell(
                   onTap: () => onPrioritySelected(priority),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 2),
                     decoration: BoxDecoration(
                       color: isSelected ? color : color.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isSelected ? color : color.withOpacity(0.4),
                         width: isSelected ? 2.5 : 1,
@@ -82,9 +84,9 @@ class PrioritySelector extends StatelessWidget {
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: color.withOpacity(0.4),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
+                                color: color.withOpacity(0.3),
+                                blurRadius: 6,
+                                offset: const Offset(0, 3),
                               )
                             ]
                           : [],
