@@ -41,7 +41,7 @@ class App extends StatelessWidget {
             seedColor: const Color(0xFF8B0000),
             brightness: Brightness.light,
           ),
-          cardTheme: const CardTheme(
+          cardTheme: const CardThemeData(
             margin: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
           ),
           inputDecorationTheme: const InputDecorationTheme(

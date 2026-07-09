@@ -1,30 +1,34 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:rapid_triage/main.dart';
+import 'package:rapid_triage/app.dart';
+import 'package:rapid_triage/core/services/sync_service.dart';
+import 'package:rapid_triage/features/triage/repositories/triage_repository.dart';
+import 'triage_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Triage screen renders form elements', (WidgetTester tester) async {
+    final connectivity = FakeConnectivityService()..setOnline(true);
+    final local = FakeLocalRepository();
+    final remote = FakeRemoteRepository();
+    final repo = TriageRepository(
+      localRepository: local,
+      remoteRepository: remote,
+      connectivityService: connectivity,
+    );
+    final syncService = SyncService(
+      repository: repo,
+      connectivityService: connectivity,
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      App(
+        triageRepository: repo,
+        connectivityService: connectivity,
+        syncService: syncService,
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Patient Intake Form'), findsOneWidget);
+    expect(find.text('SUBMIT TRIAGE RECORD'), findsOneWidget);
   });
 }

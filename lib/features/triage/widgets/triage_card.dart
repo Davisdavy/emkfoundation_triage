@@ -150,7 +150,7 @@ class TriageCard extends StatelessWidget {
                       const Divider(height: 1),
                       const SizedBox(height: 8),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.between,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [

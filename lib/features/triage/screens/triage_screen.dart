@@ -335,7 +335,7 @@ class _TriageScreenState extends State<TriageScreen> with WidgetsBindingObserver
                 const SizedBox(height: 24),
                 // Recent Records Header
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.between,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
                       'Recent Triage Records',
