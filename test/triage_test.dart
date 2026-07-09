@@ -58,9 +58,6 @@ class FakeLocalRepository implements LocalRepository {
   Future<void> deleteRecord(String id) async {
     records.remove(id);
   }
-  
-  @override
-  dynamic get _box => null;
 }
 
 class FakeRemoteRepository implements RemoteRepository {
@@ -77,9 +74,6 @@ class FakeRemoteRepository implements RemoteRepository {
     }
     return false;
   }
-  
-  @override
-  dynamic get _random => null;
 }
 
 void main() {
@@ -217,6 +211,76 @@ void main() {
       expect(local.records['rec_sync_1']!.isSynced, isTrue);
       expect(local.records['rec_sync_2']!.isSynced, isTrue);
       expect(notifiedCount, 2);
+    });
+
+    test('SyncService auto-triggers when connectivity stream fires online', () async {
+      final connectivity = FakeConnectivityService()..setOnline(false);
+      final local = FakeLocalRepository();
+      final remote = FakeRemoteRepository()..shouldSucceed = true;
+      final repo = TriageRepository(
+        localRepository: local,
+        remoteRepository: remote,
+        connectivityService: connectivity,
+      );
+
+      // Seed two offline records
+      await local.saveRecord(TriageRecord(
+        id: 'stream_sync_1',
+        patientName: 'Auto Sync Patient',
+        conditionDescription: 'Blunt trauma',
+        priority: 2,
+        status: TriageStatus.inTransit,
+        createdAt: DateTime.now(),
+        isSynced: false,
+      ));
+
+      final syncService = SyncService(
+        repository: repo,
+        connectivityService: connectivity,
+      );
+      syncService.init();
+
+      int completedCount = 0;
+      syncService.onSyncCompleted = (count) => completedCount = count;
+
+      // Simulate network restoration via stream
+      connectivity.setOnline(true);
+
+      // Give the async sync time to complete
+      await Future.delayed(const Duration(milliseconds: 50));
+
+      expect(remote.uploadCount, 1);
+      expect(local.records['stream_sync_1']!.isSynced, isTrue);
+      expect(completedCount, 1);
+
+      syncService.dispose();
+    });
+
+    test('Hive key-based storage prevents duplicate records (same id)', () async {
+      final connectivity = FakeConnectivityService()..setOnline(false);
+      final local = FakeLocalRepository();
+      final remote = FakeRemoteRepository()..shouldSucceed = false;
+      final repo = TriageRepository(
+        localRepository: local,
+        remoteRepository: remote,
+        connectivityService: connectivity,
+      );
+
+      final record = TriageRecord(
+        id: 'dup_id_001',
+        patientName: 'Duplicate Test',
+        conditionDescription: 'Test duplication',
+        priority: 3,
+        status: TriageStatus.pending,
+        createdAt: DateTime.now(),
+      );
+
+      // Submit the same record twice (same id)
+      await repo.submitRecord(record);
+      await repo.submitRecord(record);
+
+      // Only one record should exist (Hive put by key is idempotent)
+      expect(local.records.length, 1);
     });
 
     test('TriageProvider state and loading updates correctly', () async {

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rapid_triage/app.dart';
 import 'package:rapid_triage/core/services/sync_service.dart';
