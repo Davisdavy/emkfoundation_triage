@@ -193,38 +193,83 @@ class PrioritySelector extends StatelessWidget {
           fullWidth: true,
         ),
         const SizedBox(height: 10),
-        // Priorities 3, 4, 5 wrapped cleanly
-        Row(
-          children: [
-            Expanded(
-              child: _buildPriorityButton(
-                priority: 3,
-                isSelected: selectedPriority == 3,
-                color: _getPriorityColor(3),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildPriorityButton(
-                priority: 4,
-                isSelected: selectedPriority == 4,
-                color: _getPriorityColor(4),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: _buildPriorityButton(
-                priority: 5,
-                isSelected: selectedPriority == 5,
-                color: _getPriorityColor(5),
-              ),
-            ),
-            const Spacer(),
-          ],
+        // Priorities 3-5: horizontal scrollable row so nothing is clipped
+        SizedBox(
+          height: 66,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: 3,
+            separatorBuilder: (_, __) => const SizedBox(width: 10),
+            itemBuilder: (context, index) {
+              final priority = index + 3; // 3, 4, 5
+              final isSelected = selectedPriority == priority;
+              final color = _getPriorityColor(priority);
+              final label = _getPriorityLabel(priority);
+
+              return InkWell(
+                onTap: () => onPrioritySelected(priority),
+                borderRadius: BorderRadius.circular(16),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 120,
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: isSelected ? color : color.withOpacity(0.06),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected ? color : color.withOpacity(0.4),
+                      width: isSelected ? 2.5 : 1.2,
+                    ),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: color.withOpacity(0.25),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            )
+                          ]
+                        : [],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 26,
+                        height: 26,
+                        decoration: BoxDecoration(
+                          color: isSelected ? Colors.white : color,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$priority',
+                            style: TextStyle(
+                              color: isSelected ? color : Colors.white,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                            color: isSelected ? Colors.white : color,
+                          ),
+                          overflow: TextOverflow.visible,
+                          softWrap: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
