@@ -28,6 +28,10 @@ void main() {
       ),
     );
 
+    // Wait for the splash screen animation and state machine to complete (approx 3-4s total)
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+
     expect(find.text('Patient Registration'), findsOneWidget);
     // Button shows its disabled-state label when the form is empty.
     expect(find.text('COMPLETE FORM TO SUBMIT'), findsOneWidget);

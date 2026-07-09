@@ -6,6 +6,7 @@ import 'core/services/sync_service.dart';
 import 'features/triage/providers/triage_provider.dart';
 import 'features/triage/repositories/triage_repository.dart';
 import 'features/triage/screens/triage_screen.dart';
+import 'features/triage/screens/splash_screen.dart';
 
 class App extends StatelessWidget {
   final TriageRepository triageRepository;
@@ -37,7 +38,7 @@ class App extends StatelessWidget {
         title: 'Medic Triage',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        home: const TriageScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
