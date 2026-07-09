@@ -212,7 +212,7 @@ class PrioritySelector extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  width: 120,
+                  width: 130,
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                   decoration: BoxDecoration(
                     color: isSelected ? color : color.withOpacity(0.06),
@@ -255,13 +255,13 @@ class PrioritySelector extends StatelessWidget {
                       Expanded(
                         child: Text(
                           label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w900,
                             color: isSelected ? Colors.white : color,
                           ),
-                          overflow: TextOverflow.visible,
-                          softWrap: true,
                         ),
                       ),
                     ],
