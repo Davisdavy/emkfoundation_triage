@@ -23,10 +23,21 @@ class _TriageScreenState extends State<TriageScreen> with WidgetsBindingObserver
   int? _selectedPriority;
   TriageStatus _selectedStatus = TriageStatus.pending;
 
+  /// True only when all required fields are non-empty and priority is chosen.
+  bool get _isFormReady =>
+      _nameController.text.trim().isNotEmpty &&
+      _conditionController.text.trim().isNotEmpty &&
+      _selectedPriority != null;
+
+  void _onFieldChanged() => setState(() {});
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Rebuild on every keystroke so the button state is always current.
+    _nameController.addListener(_onFieldChanged);
+    _conditionController.addListener(_onFieldChanged);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final syncService = Provider.of<SyncService>(context, listen: false);
@@ -351,19 +362,33 @@ class _TriageScreenState extends State<TriageScreen> with WidgetsBindingObserver
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                // Submit Button
-                                ElevatedButton(
-                                  onPressed: provider.isLoading ? null : _submitForm,
-                                  child: provider.isLoading
-                                      ? const SizedBox(
-                                          height: 24,
-                                          width: 24,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2.5,
-                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                // Submit Button — disabled until all fields are filled.
+                                AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 250),
+                                  opacity: _isFormReady && !provider.isLoading ? 1.0 : 0.45,
+                                  child: ElevatedButton(
+                                    onPressed:
+                                        provider.isLoading || !_isFormReady ? null : _submitForm,
+                                    style: ElevatedButton.styleFrom(
+                                      disabledBackgroundColor: AppTheme.tertiary,
+                                      disabledForegroundColor: Colors.white70,
+                                    ),
+                                    child: provider.isLoading
+                                        ? const SizedBox(
+                                            height: 24,
+                                            width: 24,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.5,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                                            ),
+                                          )
+                                        : Text(
+                                            _isFormReady
+                                                ? 'SUBMIT TRIAGE RECORD'
+                                                : 'COMPLETE FORM TO SUBMIT',
                                           ),
-                                        )
-                                      : const Text('SUBMIT TRIAGE RECORD'),
+                                  ),
                                 ),
                               ],
                             ),
