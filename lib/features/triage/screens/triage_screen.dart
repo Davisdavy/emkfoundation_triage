@@ -323,50 +323,29 @@ class _TriageScreenState extends State<TriageScreen> with WidgetsBindingObserver
                                   'Transport Status',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     color: AppTheme.secondary,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.secondaryWhite.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(color: AppTheme.secondaryWhite, width: 1.5),
-                                  ),
-                                  child: Row(
+                                SizedBox(
+                                  height: 56,
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: const BouncingScrollPhysics(),
                                     children: [
-                                      Expanded(
-                                        child: RadioListTile<TriageStatus>(
-                                          title: const Text(
-                                            'Pending',
-                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                                          ),
-                                          value: TriageStatus.pending,
-                                          groupValue: _selectedStatus,
-                                          activeColor: AppTheme.primary,
-                                          onChanged: (val) {
-                                            if (val != null) {
-                                              setState(() => _selectedStatus = val);
-                                            }
-                                          },
-                                        ),
+                                      _StatusChip(
+                                        label: 'Pending',
+                                        icon: Icons.access_time_rounded,
+                                        isSelected: _selectedStatus == TriageStatus.pending,
+                                        onTap: () => setState(() => _selectedStatus = TriageStatus.pending),
                                       ),
-                                      Expanded(
-                                        child: RadioListTile<TriageStatus>(
-                                          title: const Text(
-                                            'In Transit',
-                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                                          ),
-                                          value: TriageStatus.inTransit,
-                                          groupValue: _selectedStatus,
-                                          activeColor: AppTheme.primary,
-                                          onChanged: (val) {
-                                            if (val != null) {
-                                              setState(() => _selectedStatus = val);
-                                            }
-                                          },
-                                        ),
+                                      const SizedBox(width: 10),
+                                      _StatusChip(
+                                        label: 'In Transit',
+                                        icon: Icons.local_shipping_outlined,
+                                        isSelected: _selectedStatus == TriageStatus.inTransit,
+                                        onTap: () => setState(() => _selectedStatus = TriageStatus.inTransit),
                                       ),
                                     ],
                                   ),
@@ -449,6 +428,71 @@ class _TriageScreenState extends State<TriageScreen> with WidgetsBindingObserver
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Compact horizontal-scroll toggle chip for Transport Status.
+class _StatusChip extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _StatusChip({
+    required this.label,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? AppTheme.secondary : AppTheme.secondaryWhite.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isSelected ? AppTheme.secondary : AppTheme.secondaryWhite,
+            width: isSelected ? 2 : 1.2,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppTheme.secondary.withOpacity(0.2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  )
+                ]
+              : [],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isSelected ? Colors.white : AppTheme.tertiary,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: isSelected ? Colors.white : AppTheme.tertiary,
+              ),
+            ),
+          ],
         ),
       ),
     );
