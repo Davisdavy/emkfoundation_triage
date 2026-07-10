@@ -197,12 +197,8 @@ flutter test --reporter compact
 
 Here is a screen recording demonstrating the full offline-first workflow and automatic background synchronization:
 
-https://github.com/Davisdavy/emkfoundation_triage/assets/demo.mp4
-*(If your Markdown viewer does not support inline video, you can view the video file directly at [assets/demo.mp4](assets/demo.mp4))*
+![Medic Triage Demo](assets/demo.mp4)
 
-<video src="assets/demo.mp4" controls width="100%" max-width="600px">
-  Your browser does not support the video tag.
-</video>
 
 ### Steps to reproduce the flow manually:
 
