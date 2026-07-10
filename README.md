@@ -193,20 +193,14 @@ flutter test --reporter compact
 
 ---
 
-## 🎥 Demo Video
+## 🎬 Demo Walkthrough
 
-Here is a screen recording demonstrating the full offline-first workflow and automatic background synchronization:
+Here is an interactive walkthrough demonstrating the full offline-first workflow and automatic background synchronization in action:
 
-<video src="https://raw.githubusercontent.com/Davisdavy/emkfoundation_triage/main/assets/demo.mp4" controls width="100%" max-width="600px">
-  Your browser does not support the video tag.
-</video>
-
-*(If the video player doesn't load inline in your browser, you can [download/watch the Demo Video directly](https://raw.githubusercontent.com/Davisdavy/emkfoundation_triage/main/assets/demo.mp4))*
-
-
-
+![Medic Triage Walkthrough](assets/demo.gif)
 
 ### Steps to reproduce the flow manually:
+
 
 1. Launch the app and submit a record while **offline** (toggle airplane mode)
 2. Observe the "Saved locally" snackbar and the **Pending** sync badge on the record card
