@@ -195,12 +195,22 @@ flutter test --reporter compact
 
 ## 🎥 Demo Video
 
-A 60-second screen recording demonstrating the full offline → sync flow is available in the repository releases or can be reproduced by:
+Here is a screen recording demonstrating the full offline-first workflow and automatic background synchronization:
+
+https://github.com/Davisdavy/emkfoundation_triage/assets/demo.mp4
+*(If your Markdown viewer does not support inline video, you can view the video file directly at [assets/demo.mp4](assets/demo.mp4))*
+
+<video src="assets/demo.mp4" controls width="100%" max-width="600px">
+  Your browser does not support the video tag.
+</video>
+
+### Steps to reproduce the flow manually:
 
 1. Launch the app and submit a record while **offline** (toggle airplane mode)
 2. Observe the "Saved locally" snackbar and the **Pending** sync badge on the record card
 3. Restore connectivity — within ~1 second the record badge automatically updates to **Synced** and a notification snackbar appears
 4. The triage list refreshes without any user action
+
 
 ---
 
